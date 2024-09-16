@@ -9,7 +9,7 @@
   <div class="col-12 sm:col-6">
     <mat-card>
       <mat-card-content>
-        <form class="grid" [formGroup]="heroForm">
+        <form class="grid" [formGroup]="heroForm" (ngSubmit)="onSubmit()">
 
           <mat-form-field class="col-12 sm:col-6">
             <mat-label>Super héroe</mat-label>
@@ -53,7 +53,7 @@
         <div class="flex justify-content-between">
           <button mat-flat-button color="warn">Borrar</button>
 
-          <button mat-flat-button color="primary">
+          <button mat-flat-button color="primary" (click)="onSubmit()">
             <mat-icon>save</mat-icon>
             Guardar
           </button>
@@ -65,7 +65,7 @@
   <div class="col-12 sm:col-6">
 
     <mat-card>
-      <img src="" alt="imagen del heroe" mat-card-image>
+      <img [src]="currentHero | heroImage" alt="imagen del heroe" mat-card-image>
     </mat-card>
 
   </div>
