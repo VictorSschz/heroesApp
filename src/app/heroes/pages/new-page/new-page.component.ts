@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Publisher, Hero } from '../../interfaces/hero.interface';
 import { HeroesService } from '../../services/heroes.service';
-import { switchMap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -97,13 +97,26 @@ export class NewPageComponent implements OnInit {
         data: this.heroForm.value
       });
 
-      dialogRef.afterClosed().subscribe(result =>{
-        if( !result )return;
+      dialogRef.afterClosed()
+      .pipe(
+        filter((result:boolean) => result === true),
+        switchMap( () => this.heroesServices.deleteHero(this.currentHero.id)),
+        filter((eliminado:boolean) => eliminado)
+      )
+      .subscribe(() =>{
+        this.router.navigateByUrl('/heroes');
+      });
 
-        this.heroesServices.deleteHero(this.currentHero.id)
+      // Funciona pero el código es algo confuso
+      // dialogRef.afterClosed().subscribe(result =>{
+      //   if( !result )return;
 
-        this.router.navigateByUrl('/heroes')
-      })
+      //   this.heroesServices.deleteHero(this.currentHero.id)
+      //     .subscribe( eliminado =>{
+      //       if(eliminado)
+      //         this.router.navigateByUrl('/heroes')
+      //     });
+      // })
 
 
   }
